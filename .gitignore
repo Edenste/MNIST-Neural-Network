@@ -122,3 +122,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Models
+*.model
+
+# Visual Studio Code
+.vscode/
