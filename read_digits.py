@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import glob
 
 # Load MNIST dataset
 mnist = tf.keras.datasets.mnist # Training data and testing data are already separated
@@ -20,16 +21,15 @@ loss, accuracy = model.evaluate(x_test, y_test)
 print('Loss: ', str(loss), '\nAccuracy: ', accuracy)
 
 # Demonstrate prediction
-image_number = 1
-while os.path.isfile(f"digits/digit{image_number}.png"):
+image_paths = glob.glob("digits/*.png")
+
+for image_path in image_paths:
     try:
-        img = cv2.imread(f"digits/digit{image_number}.png")[:,:,0]
+        img = cv2.imread(image_path)[:,:,0]
         img = np.invert(np.array([img]))
         prediction = model.predict(img)
         print(f"This digit is probably a {np.argmax(prediction)}") # Argmax returns the neuron that has the highest activation
         plt.imshow(img[0], cmap = plt.cm.binary)
         plt.show()
-    except:
-        print("An exception occurred")
-    finally:
-        image_number += 1
+    except Exception as e:
+        print(f"An exception has occurred for image {image_path}: {str(e)}")
